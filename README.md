@@ -1,76 +1,84 @@
-# AIRP 多场景 AI 角色扮演实训平台 Demo
+AIRP 多场景 AI 角色扮演实训平台（初赛 Demo）
+在线体验地址：https://www.xmuairp.uk
 
-本项目是 AIRP（AI Role Play）多场景角色扮演实训平台的初赛 Demo 版本，前后端分离，后端使用 Node.js + Express + MySQL，前端为原生 HTML + CSS + JavaScript，AI 模块暂用 Fake AI 脚本，并预留大模型 API 接口。
+一、项目简介
+AIRP（AI Role Play）多场景角色扮演实训平台，用于在虚拟场景中进行面试、教学、公共服务、特殊教育等多种角色扮演训练，并生成能力评估报告，支持训练复盘。
 
-## 目录结构
+当前版本为初赛 Demo：
 
-- `public/`：前端静态页面
-  - `login.html`：登录页
-  - `register.html`：注册页
-  - `app.html`：主应用界面（产品简介、训练场景、能力报告、历史评测、团队介绍）
-- `css/`
-  - `style.css`：整体布局与 ChatGPT/Notion 风格样式
-- `js/`
-  - `api.js`：封装前端调用后端 RESTful API 的方法
-  - `chat.js`：AI 对话界面逻辑、Fake AI 返回处理、能力报告渲染
-  - `app.js`：左侧导航、训练场景加载、历史记录与对话详情
-- `server/`
-  - `server.js`：Express 启动入口，挂载各 API 路由并托管前端静态资源
-  - `db.js`：MySQL 连接池配置
-  - `routes/auth.js`：用户注册 `/api/register`、登录 `/api/login`
-  - `routes/training.js`：训练场景 `/api/scenarios`、历史记录 `/api/history`
-  - `routes/chat.js`：AI 聊天 `/api/chat`，负责 Fake AI 流程与评分生成
-  - `services/fakeAI.js`：基于脚本的 Fake AI，实现 `generateAIReply(userInput, scenario)`
-- `sql/schema.sql`：数据库建表脚本
-- `.env.example`：环境变量示例
+AI 回复基于 预设脚本 Fake AI
+已预留大模型接口，决赛版本可无缝接入 OpenAI / DeepSeek 等大模型
+二、核心功能
+用户登录 / 注册
 
-## 环境准备
+账号体系，支持多用户独立训练记录
+多场景训练
 
-1. 安装依赖：
+高校学生：课堂汇报 / 课程答辩训练
+求职者：企业面试问答训练
+特殊教育工作者：家校沟通、个别化教育计划说明
+公务员：窗口服务、政策解读与情绪安抚
+AI 对话训练
 
-```bash
-cd airp-platform
-npm install
-```
+类 ChatGPT 的左右布局聊天界面
+Fake AI 固定多轮脚本，不受用户回答内容影响，便于稳定展示流程
+每轮训练形成一个 session，并完整记录对话
+能力评估报告
 
-2. 配置数据库：
+训练结束自动生成 Demo 版能力评估：
+沟通能力 / 逻辑能力 / 专业能力 / 应变能力
+综合评分 + 改进建议
+历史报告卡片：按场景与时间展示，多卡片网格布局
+点击卡片可查看该次训练的完整对话详情
+历史训练记录 & 复盘
 
-- 确保本地安装并启动 MySQL。
-- 创建数据库和数据表：
+基于数据库的持久化存储
+支持跨场景、多次训练的回看与分析
+团队介绍
 
-```bash
-mysql -u root -p < sql/schema.sql
-```
+展示项目背景、团队构成与指导老师信息
+三、技术栈与架构
+前端
 
-- 复制 `.env.example` 为 `.env`，根据本机情况修改数据库账号、密码等配置：
+原生 HTML5 + CSS3 + JavaScript
+布局与交互风格参考 ChatGPT / Notion 的浅色简约 UI
+使用 fetch 调用后端 RESTful API
+后端
 
-```bash
-cp .env.example .env
-```
+Node.js + Express.js
+路由：
+/api/register 用户注册
+/api/login 用户登录
+/api/scenarios 获取训练场景列表
+/api/chat AI 对话（Fake AI + 生成 Demo 报告）
+/api/history & /api/history/:id 历史训练记录与对话详情
+数据库
 
-3. 启动后端服务：
+MySQL
+关键表结构：
+users：用户信息
+training_sessions：训练会话（场景、评分、时间）
+chat_messages：每条对话消息（user / ai）
+部署方案
 
-```bash
-npm start
-# 或开发模式：
-npm run dev
-```
-
-服务默认运行在 `http://localhost:4000`。
-
-## 使用说明
-
-1. 访问 `http://localhost:4000/`，进入登录页。
-2. 若无账号，可点击“去注册”，完成注册后返回登录。
-3. 登录成功后进入 `/public/app.html` 主界面：
-   - 左侧为「产品简介 / 训练场景 / 能力报告 / 历史评测 / 团队介绍」导航。
-   - 右侧主内容区展示对应模块，训练场景下可选择 AI 面试 / 教学 / 公共服务 / 特殊教育等卡片，进入类似 ChatGPT 的对话界面。
-4. 在训练结束后，系统会随机生成 Demo 版能力评估报告，并可在「能力报告」与「历史评测」模块中查看与复盘对话记录。
-
-## Fake AI 与大模型接口预留
-
-- 当前版本的 AI 回复由 `server/services/fakeAI.js` 中的脚本驱动：
-  - 不同场景（AI 面试、教学、公共服务、特殊教育）对应不同对话脚本。
-  - 每次用户回复后，Fake AI 返回脚本中的下一句话，直至结束。
-- 在后续决赛版本中，可在 `generateAIReply(userInput, scenario)` 内部替换为真实大模型调用（如 OpenAI、DeepSeek 等），保留相同的入参和返回方式即可。
-
+前端：Vercel 静态托管（入口 public/）
+后端：Railway Node.js 服务 + Railway MySQL
+前端通过 https://xmuairp-platform-production.up.railway.app 调用后端 API
+四、典型使用流程
+打开平台：https://www.xmuairp.uk
+注册或使用已有账号登录
+进入主界面 /app：
+先在左侧选择「训练场景」
+点击一个场景卡片（高校学生 / 求职者 / 特殊教育工作者 / 公务员）
+在右侧聊天窗口进行多轮问答，直到 Fake AI 提示“本次训练结束”
+切换到「能力报告」：
+查看最新训练的能力评估报告（维度评分 + 建议）
+在「历史能力评估报告」中浏览所有报告卡片，并点击查看完整对话复盘
+如需退出，可在侧边栏底部点击「退出登录」
+五、后续升级方向（大模型接入）
+将 generateAIReply(userInput, scenario) 从 Fake AI 替换为大模型调用：
+支持 OpenAI / DeepSeek / 国内大模型 API
+引入更细粒度的评价指标：
+语义相似度、情绪分析、知识点覆盖率等
+提供可配置的场景模板与角色配置：
+可视化配置面试官 / 教师 / 服务窗口人员画像及话术策略
