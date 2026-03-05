@@ -1,205 +1,202 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <title>AIRP 多场景 AI 实训平台</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body class="airp-body">
-    <div class="app-shell">
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <div class="logo-circle">AI</div>
-          <div>
-            <div class="product-name">AIRP 实训平台</div>
-            <div class="product-subtitle">多场景 AI Role Play</div>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>AIRP 多场景 AI 实训平台</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="airp-body">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-circle">AI</div>
+        <div>
+          <div class="product-name">AIRP 实训平台</div>
+          <div class="product-subtitle">多场景 AI Role Play</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-page="intro">产品简介</button>
+        <button class="nav-item" data-page="scenes">训练场景</button>
+        <button class="nav-item" data-page="report">能力报告</button>
+        <button class="nav-item" data-page="team">团队介绍</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="avatar-circle" id="sidebar-avatar"></div>
+          <div class="user-meta">
+            <div id="sidebar-username">User</div>
+            <div class="user-tag">Demo 版本</div>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn ghost-btn small">退出登录</button>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="main-header">
+        <div>
+          <h1 id="main-title">AIRP 多场景 AI 实训平台</h1>
+          <p id="main-subtitle">请选择左侧菜单，开始训练体验。</p>
+        </div>
+        <div class="demo-badge">Demo · DeepSeek 大模型驱动</div>
+      </header>
+
+      <section class="main-content">
+        <!-- 产品简介 -->
+        <div id="page-intro" class="page active">
+          <div class="card">
+            <h2>产品简介</h2>
+            <p>
+              AIRP（AI Role Play）多场景角色扮演实训平台，面向高校、企业与教育机构，提供可配置的 AI 角色扮演训练能力。
+            </p>
+            <ul>
+              <li>支持 AI 面试、教学、公共服务、特殊教育等多种场景。</li>
+              <li>结合 AI 对话与能力评估，为学员提供训练反馈与改进建议。</li>
+              <li>保留完整训练记录，支持复盘与对话回放。</li>
+            </ul>
+            <p class="muted">
+              当前为初赛 Demo 版本。
+            </p>
           </div>
         </div>
 
-        <nav class="sidebar-nav">
-          <button class="nav-item active" data-page="intro">产品简介</button>
-          <button class="nav-item" data-page="scenes">训练场景</button>
-          <button class="nav-item" data-page="report">能力报告</button>
-          <button class="nav-item" data-page="team">团队介绍</button>
-        </nav>
+        <!-- 训练场景 -->
+        <div id="page-scenes" class="page">
+          <div class="card">
+            <h2>选择训练场景</h2>
+            <p class="muted">
+              点击下方任意场景卡片，进入对应 AI 角色扮演训练。
+            </p>
+            <div id="scene-list" class="scene-grid"></div>
+          </div>
 
-        <div class="sidebar-footer">
-          <div class="user-info">
-            <div class="avatar-circle" id="sidebar-avatar"></div>
-            <div class="user-meta">
-              <div id="sidebar-username">User</div>
-              <div class="user-tag">Demo 版本</div>
+          <!-- AI 对话区域 -->
+          <div id="chat-section" class="card chat-card hidden">
+            <div class="chat-header">
+              <div>
+                <div class="chat-title">AIRP AI Trainer</div>
+                <div class="chat-subtitle" id="chat-scenario-label">
+                  当前场景：
+                </div>
+              </div>
+              <div class="demo-badge subtle">
+                Demo 版本 · 内置 DeepSeek 大模型
+              </div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages"></div>
+
+            <div class="chat-input-row">
+              <textarea id="chat-input" placeholder="请输入你的回答，回车发送..." rows="2"></textarea>
+              <button id="chat-send-btn" class="btn primary-btn">
+                发送
+              </button>
+            </div>
+            <div class="chat-tip">
+
             </div>
           </div>
-          <button id="logout-btn" class="btn ghost-btn small">退出登录</button>
         </div>
-      </aside>
 
-      <main class="main-panel">
-        <header class="main-header">
-          <div>
-            <h1 id="main-title">AIRP 多场景 AI 实训平台</h1>
-            <p id="main-subtitle">请选择左侧菜单，开始训练体验。</p>
+        <!-- 能力报告 -->
+        <div id="page-report" class="page">
+          <div class="card" id="report-placeholder">
+            <h2>能力评估报告</h2>
+            <p class="muted">
+              完成一轮 AI 训练后，这里将展示最新一次训练的 Demo 能力评估结果。下方提供了不同角色场景下的示例对话与评分，便于快速理解平台能力。
+            </p>
           </div>
-          <div class="demo-badge">Demo · DeepSeek 大模型驱动</div>
-        </header>
+          <div class="card hidden" id="report-card"></div>
 
-        <section class="main-content">
-          <!-- 产品简介 -->
-          <div id="page-intro" class="page active">
-            <div class="card">
-              <h2>产品简介</h2>
-              <p>
-                AIRP（AI Role Play）多场景角色扮演实训平台，面向高校、企业与教育机构，提供可配置的 AI 角色扮演训练能力。
-              </p>
-              <ul>
-                <li>支持 AI 面试、教学、公共服务、特殊教育等多种场景。</li>
-                <li>结合 AI 对话与能力评估，为学员提供训练反馈与改进建议。</li>
-                <li>保留完整训练记录，支持复盘与对话回放。</li>
-              </ul>
-              <p class="muted">
-                当前为初赛 Demo 版本，AI 大模型接口将于后续版本接入（如 OpenAI / DeepSeek 等）。
-              </p>
-            </div>
+          <div class="card">
+            <h3>历史能力评估报告</h3>
+            <p class="muted">
+              每次完成训练后都会形成一条报告卡片，点击卡片可查看该次训练的完整对话内容。
+            </p>
+            <div id="report-list" class="report-list"></div>
           </div>
 
-          <!-- 训练场景 -->
-          <div id="page-scenes" class="page">
-            <div class="card">
-              <h2>选择训练场景</h2>
-              <p class="muted">
-                点击下方任意场景卡片，进入对应 AI 角色扮演训练。
-              </p>
-              <div id="scene-list" class="scene-grid"></div>
-            </div>
-
-            <!-- AI 对话区域 -->
-            <div id="chat-section" class="card chat-card hidden">
-              <div class="chat-header">
-                <div>
-                  <div class="chat-title">AIRP AI Trainer</div>
-                  <div class="chat-subtitle" id="chat-scenario-label">
-                    当前场景：
-                  </div>
-                </div>
-                <div class="demo-badge subtle">
-                  Demo 版本 · 内置 DeepSeek 大模型
-                </div>
-              </div>
-
-              <div id="chat-messages" class="chat-messages"></div>
-
-              <div class="chat-input-row">
-                <textarea
-                  id="chat-input"
-                  placeholder="请输入你的回答，回车发送..."
-                  rows="2"
-                ></textarea>
-                <button id="chat-send-btn" class="btn primary-btn">
-                  发送
-                </button>
-              </div>
-              <div class="chat-tip">
-                本 Demo 中 AI 回复由预设脚本驱动，用于展示多轮交互与能力评估流程。大模型 API
-                将在决赛版本中接入。
-              </div>
-            </div>
+          <div class="card hidden" id="report-dialog-card">
+            <h3 id="report-dialog-title">对话详情</h3>
+            <div id="report-dialog-messages" class="chat-messages small"></div>
           </div>
 
-          <!-- 能力报告 -->
-          <div id="page-report" class="page">
-            <div class="card" id="report-placeholder">
-              <h2>能力评估报告</h2>
-              <p class="muted">
-                完成一轮 AI 训练后，这里将展示最新一次训练的 Demo 能力评估结果。下方提供了不同角色场景下的示例对话与评分，便于快速理解平台能力。
-              </p>
-            </div>
-            <div class="card hidden" id="report-card"></div>
-
-            <div class="card">
-              <h3>历史能力评估报告</h3>
-              <p class="muted">
-                每次完成训练后都会形成一条报告卡片，点击卡片可查看该次训练的完整对话内容。
-              </p>
-              <div id="report-list" class="report-list"></div>
-            </div>
-
-            <div class="card hidden" id="report-dialog-card">
-              <h3 id="report-dialog-title">对话详情</h3>
-              <div id="report-dialog-messages" class="chat-messages small"></div>
-            </div>
-
-            <div class="card">
-              <h3>多场景能力评估示例（Mock 数据）</h3>
-              <p class="muted">
-                以下为高校学生、求职者、特殊教育工作者、公务员四类典型角色的训练片段与 Demo 评分示例，真实版本将结合大模型和更丰富的指标体系。
-              </p>
-              <div class="report-mock-grid">
-                <div class="report-mock-item">
-                  <h4>高校学生 · 课堂汇报训练</h4>
-                  <p>
-                    <strong>AI：</strong>请你用 1 分钟介绍一下本次课程项目的核心目标。<br />
-                    <strong>学员：</strong>本次项目主要是通过搭建 AIRP 平台，帮助同学在安全环境中反复练习面试与课堂汇报……
-                  </p>
-                  <p class="muted">
-                    沟通能力 8.5 / 10 · 逻辑能力 7.5 / 10 · 专业能力 7.0 / 10 · 应变能力 8.0 / 10
-                  </p>
-                </div>
-                <div class="report-mock-item">
-                  <h4>求职者 · 岗位面试训练</h4>
-                  <p>
-                    <strong>AI：</strong>为什么你适合这份岗位？请给出一个具体案例。<br />
-                    <strong>求职者：</strong>在上一段实习中，我负责从 0 到 1 搭建了一个内部数据看板……
-                  </p>
-                  <p class="muted">
-                    沟通能力 8.0 / 10 · 逻辑能力 8.5 / 10 · 专业能力 8.0 / 10 · 应变能力 7.5 / 10
-                  </p>
-                </div>
-                <div class="report-mock-item">
-                  <h4>特殊教育工作者 · 家校沟通训练</h4>
-                  <p>
-                    <strong>AI：</strong>请你向家长解释本次个别化教学计划的重点，并安抚家长的焦虑情绪。<br />
-                    <strong>教师：</strong>这份计划会分阶段评估孩子在课堂参与度、情绪稳定性和自理能力……
-                  </p>
-                  <p class="muted">
-                    沟通能力 9.0 / 10 · 逻辑能力 7.5 / 10 · 专业能力 8.5 / 10 · 应变能力 8.5 / 10
-                  </p>
-                </div>
-                <div class="report-mock-item">
-                  <h4>公务员 · 窗口服务训练</h4>
-                  <p>
-                    <strong>AI：</strong>面对情绪激动的群众，你会如何在遵守政策的前提下进行解释？<br />
-                    <strong>工作人员：</strong>我会先请对方坐下，确认诉求，再用通俗语言解释办理流程和替代方案……
-                  </p>
-                  <p class="muted">
-                    沟通能力 8.5 / 10 · 逻辑能力 8.0 / 10 · 专业能力 7.5 / 10 · 应变能力 9.0 / 10
-                  </p>
-                </div>
+          <div class="card">
+            <h3>多场景能力评估示例（Mock 数据）</h3>
+            <p class="muted">
+              以下为高校学生、求职者、特殊教育工作者、公务员四类典型角色的训练片段与 Demo 评分示例，真实版本将结合大模型和更丰富的指标体系。
+            </p>
+            <div class="report-mock-grid">
+              <div class="report-mock-item">
+                <h4>高校学生 · 课堂汇报训练</h4>
+                <p>
+                  <strong>AI：</strong>请你用 1 分钟介绍一下本次课程项目的核心目标。<br />
+                  <strong>学员：</strong>本次项目主要是通过搭建 AIRP 平台，帮助同学在安全环境中反复练习面试与课堂汇报……
+                </p>
+                <p class="muted">
+                  沟通能力 8.5 / 10 · 逻辑能力 7.5 / 10 · 专业能力 7.0 / 10 · 应变能力 8.0 / 10
+                </p>
+              </div>
+              <div class="report-mock-item">
+                <h4>求职者 · 岗位面试训练</h4>
+                <p>
+                  <strong>AI：</strong>为什么你适合这份岗位？请给出一个具体案例。<br />
+                  <strong>求职者：</strong>在上一段实习中，我负责从 0 到 1 搭建了一个内部数据看板……
+                </p>
+                <p class="muted">
+                  沟通能力 8.0 / 10 · 逻辑能力 8.5 / 10 · 专业能力 8.0 / 10 · 应变能力 7.5 / 10
+                </p>
+              </div>
+              <div class="report-mock-item">
+                <h4>特殊教育工作者 · 家校沟通训练</h4>
+                <p>
+                  <strong>AI：</strong>请你向家长解释本次个别化教学计划的重点，并安抚家长的焦虑情绪。<br />
+                  <strong>教师：</strong>这份计划会分阶段评估孩子在课堂参与度、情绪稳定性和自理能力……
+                </p>
+                <p class="muted">
+                  沟通能力 9.0 / 10 · 逻辑能力 7.5 / 10 · 专业能力 8.5 / 10 · 应变能力 8.5 / 10
+                </p>
+              </div>
+              <div class="report-mock-item">
+                <h4>公务员 · 窗口服务训练</h4>
+                <p>
+                  <strong>AI：</strong>面对情绪激动的群众，你会如何在遵守政策的前提下进行解释？<br />
+                  <strong>工作人员：</strong>我会先请对方坐下，确认诉求，再用通俗语言解释办理流程和替代方案……
+                </p>
+                <p class="muted">
+                  沟通能力 8.5 / 10 · 逻辑能力 8.0 / 10 · 专业能力 7.5 / 10 · 应变能力 9.0 / 10
+                </p>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- 团队介绍 -->
-          <div id="page-team" class="page">
-            <div class="card">
-              <h2>团队介绍</h2>
-              <p>
-                本 Demo 项目由 AIRP 团队开发，用于展示多场景 AI 角色扮演实训平台的核心逻辑与交互流程。
-              </p>
-              <ul>
-                <li>团队成员：产品、算法、前端、后端、教学设计等多角色合作。</li>
-                <li>指导老师：在教育数字化、AI 应用等方向提供专业指导。</li>
-                <li>项目目标：让 AI 赋能实训教学，帮助学员在安全环境中反复练习与复盘。</li>
-              </ul>
-            </div>
+        <!-- 团队介绍 -->
+        <div id="page-team" class="page">
+          <div class="card">
+            <h2>团队介绍</h2>
+            <p>
+              本 Demo 项目由 AIRP 团队开发，用于展示多场景 AI 角色扮演实训平台的核心逻辑与交互流程。
+            </p>
+            <ul>
+              <li>团队成员：产品、算法、前端、后端、教学设计等多角色合作。</li>
+              <li>指导老师：在教育数字化、AI 应用等方向提供专业指导。</li>
+              <li>项目目标：让 AI 赋能实训教学，帮助学员在安全环境中反复练习与复盘。</li>
+            </ul>
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/chat.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+  <script src="js/api.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
 </html>
-
