@@ -415,7 +415,7 @@ a:hover {
 }
 
 .chat-messages {
-  height: 360px;
+  height: 520px;
   border-radius: 14px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
@@ -428,7 +428,7 @@ a:hover {
 }
 
 .chat-messages.small {
-  height: 220px;
+  height: 420px;
 }
 
 .message-row {
@@ -444,7 +444,7 @@ a:hover {
 }
 
 .message-bubble {
-  max-width: 85%;
+  max-width: 96%;
   padding: 8px 10px;
   border-radius: 12px;
   line-height: 1.5;
