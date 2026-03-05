@@ -6,6 +6,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
 const trainingRoutes = require('./routes/training');
+const { initDb } = require('./initDb');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -27,7 +28,15 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`AIRP platform demo server running on http://localhost:${PORT}`);
+async function start() {
+  await initDb();
+  app.listen(PORT, () => {
+    console.log(`AIRP platform demo server running on http://localhost:${PORT}`);
+  });
+}
+
+start().catch((err) => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
 });
 
