@@ -1,4 +1,4 @@
-const API_BASE = '';
+const API_BASE = 'https://xmu-airp-platform-production.up.railway.app';
 
 async function apiRequest(path, options = {}) {
   const token = localStorage.getItem('airp_token');
