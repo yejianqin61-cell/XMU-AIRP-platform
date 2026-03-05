@@ -1,7 +1,7 @@
 const express = require('express');
 const pool = require('../db');
 const { generateAIReply: generateFakeAIReply } = require('../services/fakeAI');
-const { generateDeepSeekReply } = require('../services/deepseek');
+const { generateDeepSeekReply, generateDeepSeekReport } = require('../services/deepseek');
 
 const router = express.Router();
 
@@ -115,21 +115,57 @@ router.post('/chat', async (req, res) => {
       aiReply.includes('本次模拟结束');
 
     if (scriptEnded) {
-      const { metrics, finalScore } = generateRandomScore();
-      await pool.query(
-        'UPDATE training_sessions SET score = ? WHERE id = ?',
-        [finalScore, sid]
-      );
-      report = {
-        title: 'AIRP 能力评估报告（Demo）',
-        metrics,
-        suggestions: [
-          '建议增强逻辑表达，回答时多分点陈述。',
-          '可以多结合实际案例，让回答更具体。',
-          '注意语速与语气，让沟通更自然。'
-        ],
-        finalScore
-      };
+      try {
+        if (process.env.DEEPSEEK_API_KEY) {
+          const dsReport = await generateDeepSeekReport({
+            scenario,
+            history: historyRows
+          });
+          await pool.query(
+            'UPDATE training_sessions SET score = ? WHERE id = ?',
+            [dsReport.finalScore, sid]
+          );
+          report = {
+            title: 'AIRP 能力评估报告（DeepSeek）',
+            metrics: dsReport.metrics,
+            suggestions: dsReport.suggestions,
+            finalScore: dsReport.finalScore
+          };
+        } else {
+          const { metrics, finalScore } = generateRandomScore();
+          await pool.query(
+            'UPDATE training_sessions SET score = ? WHERE id = ?',
+            [finalScore, sid]
+          );
+          report = {
+            title: 'AIRP 能力评估报告（Demo）',
+            metrics,
+            suggestions: [
+              '建议增强逻辑表达，回答时多分点陈述。',
+              '可以多结合实际案例，让回答更具体。',
+              '注意语速与语气，让沟通更自然。'
+            ],
+            finalScore
+          };
+        }
+      } catch (e) {
+        console.error('DeepSeek scoring error, fallback to random score:', e);
+        const { metrics, finalScore } = generateRandomScore();
+        await pool.query(
+          'UPDATE training_sessions SET score = ? WHERE id = ?',
+          [finalScore, sid]
+        );
+        report = {
+          title: 'AIRP 能力评估报告（Demo）',
+          metrics,
+          suggestions: [
+            '建议增强逻辑表达，回答时多分点陈述。',
+            '可以多结合实际案例，让回答更具体。',
+            '注意语速与语气，让沟通更自然。'
+          ],
+          finalScore
+        };
+      }
     }
 
     res.json({
