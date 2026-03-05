@@ -1,0 +1,29 @@
+{
+  "name": "airp-platform-demo",
+  "version": "1.0.0",
+  "description": "AIRP 多场景 AI 角色扮演实训平台 Demo（初赛版本，Fake AI，预留大模型接口）",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "keywords": [
+    "AIRP",
+    "role-play",
+    "training",
+    "demo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

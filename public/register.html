@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AIRP 多场景 AI 实训平台 - 注册</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body class="airp-body">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <h1 class="auth-title">创建账号</h1>
+        <p class="auth-subtitle">加入 AIRP 多场景 AI 实训平台</p>
+
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="username">用户名</label>
+            <input id="username" name="username" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="password">密码</label>
+            <input id="password" name="password" type="password" required />
+          </div>
+          <div class="form-group">
+            <label for="confirm">确认密码</label>
+            <input id="confirm" name="confirm" type="password" required />
+          </div>
+          <button type="submit" class="btn primary-btn full">注册</button>
+        </form>
+
+        <p class="auth-link-row">
+          已有账号？
+          <a href="login.html">去登录</a>
+        </p>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+      const form = document.getElementById('register-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = form.username.value.trim();
+        const password = form.password.value;
+        const confirm = form.confirm.value;
+        if (!username || !password) return;
+        if (password !== confirm) {
+          alert('两次输入的密码不一致');
+          return;
+        }
+        try {
+          await apiPost('/api/register', { username, password });
+          alert('注册成功，请登录');
+          window.location.href = 'login.html';
+        } catch (err) {
+          alert(err.message || '注册失败');
+        }
+      });
+    </script>
+  </body>
+</html>
+
