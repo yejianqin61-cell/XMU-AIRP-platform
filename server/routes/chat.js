@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db');
-const { generateAIReply } = require('../services/fakeAI');
+const { generateAIReply: generateFakeAIReply } = require('../services/fakeAI');
+const { generateDeepSeekReply } = require('../services/deepseek');
 
 const router = express.Router();
 
@@ -77,8 +78,28 @@ router.post('/chat', async (req, res) => {
     );
     const aiTurnCount = aiCountRows[0].c;
 
-    // Fake AI 回复
-    const aiReply = generateAIReply(message, scenario, aiTurnCount);
+    // 取当前 session 的完整历史对话，用于 DeepSeek 上下文
+    const [historyRows] = await pool.query(
+      'SELECT sender, message FROM chat_messages WHERE session_id = ? ORDER BY created_at ASC',
+      [sid]
+    );
+
+    // 优先使用 DeepSeek，大模型失败或未配置时回退 Fake AI
+    let aiReply;
+    try {
+      if (process.env.DEEPSEEK_API_KEY) {
+        aiReply = await generateDeepSeekReply({
+          userInput: message,
+          scenario,
+          history: historyRows
+        });
+      } else {
+        aiReply = generateFakeAIReply(message, scenario, aiTurnCount);
+      }
+    } catch (e) {
+      console.error('DeepSeek error, fallback to Fake AI:', e);
+      aiReply = generateFakeAIReply(message, scenario, aiTurnCount);
+    }
 
     await pool.query(
       'INSERT INTO chat_messages (session_id, sender, message) VALUES (?, ?, ?)',
