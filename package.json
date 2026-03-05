@@ -1,7 +1,7 @@
 {
   "name": "airp-platform-demo",
   "version": "1.0.0",
-  "description": "AIRP 多场景 AI 角色扮演实训平台 Demo（初赛版本，Fake AI，预留大模型接口）",
+  "description": "AIRP 多场景 AI 角色扮演实训平台 Demo（接入 DeepSeek 大模型）",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

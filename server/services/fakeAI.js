@@ -1,4 +1,4 @@
-// Fake AI 脚本，用于初赛 Demo
+// 预设对话脚本（用于兜底，无大模型或出错时使用）
 
 const INTERVIEW_SCRIPT = [
   '你好，请做一个简单自我介绍。',

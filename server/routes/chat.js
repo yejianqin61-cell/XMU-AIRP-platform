@@ -84,7 +84,7 @@ router.post('/chat', async (req, res) => {
       [sid]
     );
 
-    // 优先使用 DeepSeek，大模型失败或未配置时回退 Fake AI
+    // 优先使用 DeepSeek，大模型失败或未配置时回退到预设脚本
     let aiReply;
     try {
       if (process.env.DEEPSEEK_API_KEY) {
@@ -97,7 +97,7 @@ router.post('/chat', async (req, res) => {
         aiReply = generateFakeAIReply(message, scenario, aiTurnCount);
       }
     } catch (e) {
-      console.error('DeepSeek error, fallback to Fake AI:', e);
+      console.error('DeepSeek error, fallback to scripted replies:', e);
       aiReply = generateFakeAIReply(message, scenario, aiTurnCount);
     }
 
