@@ -41,6 +41,10 @@ async function sendChatMessage() {
     if (res.report) {
       chatState.lastReport = res.report;
       renderReport(res.report);
+      const summary = buildScoreSummary(res.report);
+      if (summary) {
+        appendMessage('ai', summary, container);
+      }
     }
   } catch (err) {
     appendMessage('ai', '服务器暂时不可用，请稍后再试。', container);
@@ -75,10 +79,18 @@ function renderReport(report) {
   `;
 }
 
+function buildScoreSummary(report) {
+  if (!report || !report.metrics) return '';
+  const m = report.metrics;
+  const final = report.finalScore;
+  return `本次训练结束，综合得分为 ${final}/10。\n沟通能力：${m.communication}/10，逻辑能力：${m.logic}/10，专业能力：${m.professional}/10，应变能力：${m.flexibility}/10。详细文字点评可在右侧能力评估报告中查看。`;
+}
+
 window.airpChat = {
   chatState,
   appendMessage,
   sendChatMessage,
-  renderReport
+  renderReport,
+  buildScoreSummary
 };
 

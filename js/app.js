@@ -147,6 +147,14 @@ function enterScene(sceneId) {
         window.airpChat.chatState.lastReport = res.report;
         window.airpChat.renderReport(res.report);
 
+        const summary =
+          typeof window.airpChat.buildScoreSummary === 'function'
+            ? window.airpChat.buildScoreSummary(res.report)
+            : '';
+        if (summary) {
+          window.airpChat.appendMessage('ai', summary, container);
+        }
+
         // 如果当前在能力报告页，刷新报告列表
         const reportPage = document.getElementById('page-report');
         if (reportPage && reportPage.classList.contains('active')) {
